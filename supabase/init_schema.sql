@@ -60,7 +60,7 @@ CREATE TABLE lessons (
 );
 
 -- Table: student_profiles
-CREATE TABLE student_profiles (
+CREATE TABLE IF NOT EXISTS student_profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   email TEXT,
@@ -76,7 +76,7 @@ CREATE TABLE student_profiles (
 );
 
 -- Table: user_lesson_state
-CREATE TABLE user_lesson_state (
+CREATE TABLE IF NOT EXISTS user_lesson_state (
   user_id UUID NOT NULL REFERENCES student_profiles(id) ON DELETE CASCADE,
   lesson_id UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
   is_completed BOOLEAN DEFAULT false,
@@ -107,7 +107,7 @@ CREATE POLICY "Users can manage own progress" ON user_lesson_state
   FOR ALL USING (auth.uid() = user_id);
 
 -- Table: admin_users
-CREATE TABLE admin_users (
+CREATE TABLE IF NOT EXISTS admin_users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
