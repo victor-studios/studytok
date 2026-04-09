@@ -6,8 +6,9 @@ export const revalidate = 0; // Disable static caching for admin dashboard
 
 async function getStats() {
   const supabase = await createClient();
-  const [studentsReq, subjectsReq, lessonsReq, recentStudentsReq] = await Promise.all([
+  const [studentsReq, classesReq, subjectsReq, lessonsReq, recentStudentsReq] = await Promise.all([
     supabase.from("student_profiles").select("*", { count: "exact", head: true }),
+    supabase.from("academic_classes").select("*", { count: "exact", head: true }),
     supabase.from("subjects").select("*", { count: "exact", head: true }),
     supabase.from("lessons").select("*", { count: "exact", head: true }),
     supabase.from("student_profiles").select("*").order("joined_date", { ascending: false }).limit(4),
@@ -15,6 +16,7 @@ async function getStats() {
 
   return {
     students: studentsReq.count || 0,
+    classes: classesReq.count || 0,
     subjects: subjectsReq.count || 0,
     lessons: lessonsReq.count || 0,
     recentStudents: recentStudentsReq.data || [],
@@ -39,22 +41,22 @@ export default async function DashboardPage() {
           color="from-blue-500 to-cyan-400"
         />
         <StatCard
-          title="Active Classes/Subjects"
-          value={stats.subjects}
+          title="Academic Classes"
+          value={stats.classes}
           icon={BookOpen}
           color="from-emerald-400 to-teal-500"
+        />
+        <StatCard
+          title="Total Subjects"
+          value={stats.subjects}
+          icon={BookOpen}
+          color="from-cyan-400 to-blue-500"
         />
         <StatCard
           title="Video Lessons"
           value={stats.lessons}
           icon={PlayCircle}
           color="from-purple-500 to-indigo-500"
-        />
-        <StatCard
-          title="System Health"
-          value="100%"
-          icon={Trophy}
-          color="from-rose-400 to-orange-500"
         />
       </div>
 

@@ -18,7 +18,7 @@ export function Sidebar() {
   if (pathname === '/login') return null;
 
   return (
-    <div className="flex h-screen w-64 flex-col border-r border-white/10 bg-black/40 backdrop-blur-2xl">
+    <div className="flex h-screen w-64 flex-col border-r border-white/10 bg-black/40 backdrop-blur-lg transform-gpu">
       <div className="flex h-16 items-center px-6 border-b border-white/10">
         <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
           StudyTok Admin
