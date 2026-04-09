@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 import '../../core/config/env.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -22,7 +24,7 @@ class AuthRepository {
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
       serverClientId: webClientId,
-      clientId: iosClientId,
+      clientId: !kIsWeb && Platform.isIOS ? iosClientId : null,
       scopes: [
         'email',
         'profile',

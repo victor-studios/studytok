@@ -1,270 +1,113 @@
-"use client";
+import { createClient } from "@/lib/supabase/server";
+import { FolderPlus, BookOpen, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { createSubject, deleteSubject } from "@/lib/actions/content";
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { BookOpen, Folder, PlayCircle, Plus, Trash2, Edit2, Play } from "lucide-react";
+export const revalidate = 0;
 
-export default function ContentManagerPage() {
-  const [activeTab, setActiveTab] = useState<"subjects" | "chapters" | "lessons">("subjects");
-  const [subjects, setSubjects] = useState<any[]>([]);
-  const [chapters, setChapters] = useState<any[]>([]);
-  const [lessons, setLessons] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Form states
-  const [subjectForm, setSubjectForm] = useState({ name: "", short_description: "", grade: "", academic_level: "grades9to10", icon_name: "LucideIcons.book", color_hex: "0xFF3B82F6" });
-  const [chapterForm, setChapterForm] = useState({ subject_id: "", title: "", description: "", order_index: 1 });
-  const [lessonForm, setLessonForm] = useState({ chapter_id: "", subject_id: "", title: "", subtitle: "", chapter_title: "", lesson_number: 1, total_lessons_in_chapter: 1, video_url: "", teacher_name: "" });
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    setIsLoading(true);
-    const [subRes, chapRes, lesRes] = await Promise.all([
-      supabase.from("subjects").select("*").order("created_at", { ascending: false }),
-      supabase.from("chapters").select("*, subjects(name)").order("created_at", { ascending: false }),
-      supabase.from("lessons").select("*, chapters(title), subjects(name)").order("created_at", { ascending: false })
-    ]);
-    if (subRes.data) setSubjects(subRes.data);
-    if (chapRes.data) setChapters(chapRes.data);
-    if (lesRes.data) setLessons(lesRes.data);
-    setIsLoading(false);
-  }
-
-  async function handleAddSubject(e: React.FormEvent) {
-    e.preventDefault();
-    await supabase.from("subjects").insert([subjectForm]);
-    setSubjectForm({ name: "", short_description: "", grade: "", academic_level: "grades9to10", icon_name: "LucideIcons.book", color_hex: "0xFF3B82F6" });
-    fetchData();
-  }
-
-  async function handleAddChapter(e: React.FormEvent) {
-    e.preventDefault();
-    await supabase.from("chapters").insert([chapterForm]);
-    setChapterForm({ subject_id: "", title: "", description: "", order_index: 1 });
-    fetchData();
-  }
-
-  async function handleAddLesson(e: React.FormEvent) {
-    e.preventDefault();
-    await supabase.from("lessons").insert([lessonForm]);
-    setLessonForm({ chapter_id: "", subject_id: "", title: "", subtitle: "", chapter_title: "", lesson_number: 1, total_lessons_in_chapter: 1, video_url: "", teacher_name: "" });
-    fetchData();
-  }
-
-  async function handleDelete(table: string, id: string) {
-    if (confirm("Are you sure you want to delete this item?")) {
-      await supabase.from(table).delete().eq("id", id);
-      fetchData();
-    }
-  }
+export default async function ContentDashboard() {
+  const supabase = await createClient();
+  const { data: subjects } = await supabase.from("subjects").select("*").order("created_at", { ascending: false });
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
-          <BookOpen className="w-8 h-8 text-indigo-400" />
-          Content Manager
-        </h1>
-        <p className="text-zinc-400 mt-2">Add or edit classes, subjects, chapters, and lessons.</p>
-      </div>
-
-      <div className="flex gap-4 border-b border-white/10 pb-4">
-        <button 
-          onClick={() => setActiveTab("subjects")}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${activeTab === 'subjects' ? 'bg-indigo-500/20 text-indigo-300' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
-        >
-          Classes & Subjects
-        </button>
-        <button 
-          onClick={() => setActiveTab("chapters")}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${activeTab === 'chapters' ? 'bg-cyan-500/20 text-cyan-300' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
-        >
-          Chapters
-        </button>
-        <button 
-          onClick={() => setActiveTab("lessons")}
-          className={`px-4 py-2 rounded-xl font-medium transition-colors ${activeTab === 'lessons' ? 'bg-emerald-500/20 text-emerald-300' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
-        >
-          Lessons & Videos
-        </button>
-      </div>
-
-      {isLoading ? (
-        <div className="flex-center py-12 text-zinc-500">Loading data...</div>
-      ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          
-          {/* Form Column */}
-          <div className="xl:col-span-1 border border-white/10 glass rounded-2xl p-6 h-fit sticky top-8">
-            <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-              <Plus className="w-5 h-5 text-indigo-400" />
-              Add New {activeTab === 'subjects' ? 'Subject' : activeTab === 'chapters' ? 'Chapter' : 'Lesson'}
-            </h2>
-            
-            {activeTab === 'subjects' && (
-              <form onSubmit={handleAddSubject} className="space-y-4">
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Class / Grade (e.g. O Level)</label>
-                  <input required value={subjectForm.grade} onChange={e => setSubjectForm({...subjectForm, grade: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Subject Name</label>
-                  <input required value={subjectForm.name} onChange={e => setSubjectForm({...subjectForm, name: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Description</label>
-                  <input required value={subjectForm.short_description} onChange={e => setSubjectForm({...subjectForm, short_description: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
-                </div>
-                <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg px-4 py-2 font-medium transition-colors mt-6">
-                  Save Subject
-                </button>
-              </form>
-            )}
-
-            {activeTab === 'chapters' && (
-              <form onSubmit={handleAddChapter} className="space-y-4">
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Select Subject</label>
-                  <select required value={chapterForm.subject_id} onChange={e => setChapterForm({...chapterForm, subject_id: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 [&>option]:bg-zinc-900">
-                    <option value="">-- Choose Subject --</option>
-                    {subjects.map(s => <option key={s.id} value={s.id}>{s.name} ({s.grade})</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Chapter Title</label>
-                  <input required value={chapterForm.title} onChange={e => setChapterForm({...chapterForm, title: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Description</label>
-                  <textarea required value={chapterForm.description} onChange={e => setChapterForm({...chapterForm, description: e.target.value})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50" rows={3}></textarea>
-                </div>
-                <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg px-4 py-2 font-medium transition-colors mt-6">
-                  Save Chapter
-                </button>
-              </form>
-            )}
-
-            {activeTab === 'lessons' && (
-              <form onSubmit={handleAddLesson} className="space-y-4">
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Select Chapter</label>
-                  <select required value={lessonForm.chapter_id} onChange={e => {
-                      const chapId = e.target.value;
-                      const chap = chapters.find(c => c.id === chapId);
-                      setLessonForm({...lessonForm, chapter_id: chapId, subject_id: chap?.subject_id || "", chapter_title: chap?.title || ""});
-                    }} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [&>option]:bg-zinc-900">
-                    <option value="">-- Choose Chapter --</option>
-                    {chapters.map(c => <option key={c.id} value={c.id}>{c.title} ({c.subjects?.name})</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Lesson Title</label>
-                  <input required value={lessonForm.title} onChange={e => setLessonForm({...lessonForm, title: e.target.value})} placeholder="e.g. Simplifying Fractions" className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-400 block mb-1">Video URL (Optional)</label>
-                  <input value={lessonForm.video_url} onChange={e => setLessonForm({...lessonForm, video_url: e.target.value})} placeholder="https://..." className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm text-zinc-400 block mb-1">Lesson #</label>
-                    <input type="number" required value={lessonForm.lesson_number} onChange={e => setLessonForm({...lessonForm, lesson_number: parseInt(e.target.value)})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50" />
-                  </div>
-                  <div>
-                    <label className="text-sm text-zinc-400 block mb-1">Total</label>
-                    <input type="number" required value={lessonForm.total_lessons_in_chapter} onChange={e => setLessonForm({...lessonForm, total_lessons_in_chapter: parseInt(e.target.value)})} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50" />
-                  </div>
-                </div>
-                <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 font-medium transition-colors mt-6">
-                  Save Lesson
-                </button>
-              </form>
-            )}
-
-          </div>
-
-          {/* List Column */}
-          <div className="xl:col-span-2 space-y-4">
-            {activeTab === 'subjects' && subjects.map(s => (
-              <div key={s.id} className="bento-card p-4 flex justify-between items-center group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex-center">
-                    <BookOpen className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg text-white">{s.name}</h3>
-                    <p className="text-sm text-zinc-400">{s.grade} • {s.short_description}</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => handleDelete('subjects', s.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {activeTab === 'chapters' && chapters.map(c => (
-              <div key={c.id} className="bento-card p-4 flex justify-between items-center group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex-center">
-                    <Folder className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg text-white">{c.title}</h3>
-                    <p className="text-sm text-zinc-400">{c.subjects?.name} • {c.description}</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => handleDelete('chapters', c.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {activeTab === 'lessons' && lessons.map(l => (
-              <div key={l.id} className="bento-card p-4 flex justify-between items-center group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex-center shrink-0">
-                    <PlayCircle className="w-5 h-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-lg text-white truncate">{l.title}</h3>
-                    <p className="text-sm text-zinc-400 truncate">{l.chapters?.title} • {l.subjects?.name}</p>
-                    {l.video_url && (
-                      <a href={l.video_url} target="_blank" rel="noreferrer" className="text-xs text-emerald-400 mt-1 inline-flex items-center gap-1 hover:underline">
-                        <Play className="w-3 h-3" /> View Video
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  <button onClick={() => handleDelete('lessons', l.id)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {/* Empty States */}
-            {activeTab === 'subjects' && subjects.length === 0 && !isLoading && (
-              <div className="text-center py-12 text-zinc-500 border border-dashed border-white/10 rounded-xl">No subjects created yet.</div>
-            )}
-            {activeTab === 'chapters' && chapters.length === 0 && !isLoading && (
-              <div className="text-center py-12 text-zinc-500 border border-dashed border-white/10 rounded-xl">No chapters created yet.</div>
-            )}
-            {activeTab === 'lessons' && lessons.length === 0 && !isLoading && (
-              <div className="text-center py-12 text-zinc-500 border border-dashed border-white/10 rounded-xl">No lessons created yet.</div>
-            )}
-
-          </div>
-
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 p-8 h-full">
+      <div className="flex justify-between items-end">
+        <div>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Curriculum Management</h1>
+          <p className="text-zinc-400 mt-2">Manage subjects, chapters, and lessons.</p>
         </div>
-      )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: List of Subjects */}
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {subjects?.map((subject) => (
+            <Link key={subject.id} href={`/content/${subject.id}`} className="block">
+              <div className="bento-card relative group hover:border-cyan-500/30 transition-all overflow-hidden h-full">
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <BookOpen className="w-32 h-32" />
+                </div>
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-12 h-12 rounded-xl flex-center shadow-lg" style={{ backgroundColor: `#${subject.color_hex}` }}>
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <form action={async () => {
+                    "use server";
+                    await deleteSubject(subject.id);
+                  }}>
+                    <button className="p-2 bg-rose-500/10 text-rose-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-500/20">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </form>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">{subject.name}</h3>
+                <p className="text-zinc-400 text-sm mb-4 line-clamp-2">{subject.short_description}</p>
+                <div className="flex gap-2">
+                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-zinc-300">
+                    {subject.academic_level}
+                  </span>
+                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-zinc-300">
+                    {subject.grade}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+          {(!subjects || subjects.length === 0) && (
+            <div className="col-span-2 p-12 border border-dashed border-white/10 rounded-2xl flex-center flex-col text-zinc-500">
+              <BookOpen className="w-12 h-12 mb-4 opacity-20" />
+              <p>No subjects found. Create one to get started.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Add Subject Form */}
+        <div className="bento-card h-fit sticky top-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-cyan-500/20 rounded-lg">
+              <FolderPlus className="w-5 h-5 text-cyan-400" />
+            </div>
+            <h2 className="text-lg font-bold text-white">New Subject</h2>
+          </div>
+          
+          <form action={createSubject} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-zinc-400 mb-1">Subject Name</label>
+              <input name="name" required placeholder="e.g. Advanced Physics" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-cyan-500 text-sm" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-zinc-400 mb-1">Short Description</label>
+              <textarea name="short_description" required placeholder="A brief overview..." rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-cyan-500 text-sm resize-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+               <div>
+                <label className="block text-xs font-medium text-zinc-400 mb-1">Academic Level</label>
+                <select name="academic_level" className="w-full bg-[#18181b] border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-cyan-500 text-sm appearance-none">
+                  <option value="grades1to8">Grades 1-8</option>
+                  <option value="oLevels">O-Levels</option>
+                  <option value="aLevels">A-Levels</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-zinc-400 mb-1">Grade Level</label>
+                <input name="grade" required placeholder="e.g. Grade 8" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-cyan-500 text-sm" />
+              </div>
+            </div>
+             <div>
+              <label className="block text-xs font-medium text-zinc-400 mb-1">Hex Color</label>
+              <div className="flex gap-2">
+                <span className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-zinc-500 text-sm">#</span>
+                <input name="color_hex" placeholder="EF4444" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-cyan-500 text-sm" />
+              </div>
+            </div>
+            <button type="submit" className="w-full bg-white text-black font-semibold rounded-xl px-4 py-2 hover:bg-zinc-200 transition-colors mt-4 text-sm shadow-lg shadow-white/5">
+              Create Subject
+            </button>
+          </form>
+        </div>
+
+      </div>
     </div>
   );
 }

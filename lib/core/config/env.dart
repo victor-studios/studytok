@@ -8,5 +8,5 @@ class Env {
   static const String googleWebClientId = '999098489451-jiqhrn3s7q51mh0fc9bspaqb64o5qo4d.apps.googleusercontent.com';
   
   // TODO: Replace with your actual iOS Client ID from Google Cloud Console (if supporting iOS)
-  static const String googleIosClientId = 'YOUR_IOS_CLIENT_ID_HERE.apps.googleusercontent.com';
+  static const String googleIosClientId = '999098489451-53o89oa4p2rhi8t3d0akrdfbp8tjlr8f.apps.googleusercontent.com';
 }

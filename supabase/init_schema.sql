@@ -87,3 +87,21 @@ CREATE POLICY "Users can manage own profile" ON student_profiles
 
 CREATE POLICY "Users can manage own progress" ON user_lesson_state 
   FOR ALL USING (auth.uid() = user_id);
+
+-- Table: admin_users
+CREATE TABLE admin_users (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
+
+-- Admins Policies (Bypass RLS)
+CREATE POLICY "Admins can read all profiles" ON student_profiles
+  FOR SELECT USING (
+    EXISTS (SELECT 1 FROM admin_users WHERE admin_users.id = auth.uid())
+  );
+
+CREATE POLICY "Admins can read own record" ON admin_users
+  FOR SELECT USING (auth.uid() = id);
