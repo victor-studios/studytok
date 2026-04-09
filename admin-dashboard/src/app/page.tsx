@@ -6,21 +6,32 @@ export const revalidate = 0; // Disable static caching for admin dashboard
 
 async function getStats() {
   const supabase = await createClient();
-  const [studentsReq, classesReq, subjectsReq, lessonsReq, recentStudentsReq] = await Promise.all([
-    supabase.from("student_profiles").select("*", { count: "exact", head: true }),
-    supabase.from("academic_classes").select("*", { count: "exact", head: true }),
-    supabase.from("subjects").select("*", { count: "exact", head: true }),
-    supabase.from("lessons").select("*", { count: "exact", head: true }),
-    supabase.from("student_profiles").select("*").order("joined_date", { ascending: false }).limit(4),
-  ]);
+  try {
+    const [studentsReq, classesReq, subjectsReq, lessonsReq, recentStudentsReq] = await Promise.all([
+      supabase.from("student_profiles").select("*", { count: "exact", head: true }),
+      supabase.from("academic_classes").select("*", { count: "exact", head: true }),
+      supabase.from("subjects").select("*", { count: "exact", head: true }),
+      supabase.from("lessons").select("*", { count: "exact", head: true }),
+      supabase.from("student_profiles").select("*").order("joined_date", { ascending: false }).limit(4),
+    ]);
 
-  return {
-    students: studentsReq.count || 0,
-    classes: classesReq.count || 0,
-    subjects: subjectsReq.count || 0,
-    lessons: lessonsReq.count || 0,
-    recentStudents: recentStudentsReq.data || [],
-  };
+    return {
+      students: studentsReq.count || 0,
+      classes: classesReq.count || 0,
+      subjects: subjectsReq.count || 0,
+      lessons: lessonsReq.count || 0,
+      recentStudents: recentStudentsReq.data || [],
+    };
+  } catch (error) {
+    console.warn("Failed to fetch stats during build:", error);
+    return {
+      students: 0,
+      classes: 0,
+      subjects: 0,
+      lessons: 0,
+      recentStudents: [],
+    };
+  }
 }
 
 export default async function DashboardPage() {
