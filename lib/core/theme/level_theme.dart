@@ -78,9 +78,9 @@ enum AcademicLevel {
       case AcademicLevel.grades1to8:
         return List.generate(8, (i) => 'Grade ${i + 1}');
       case AcademicLevel.grades9to10:
-        return ['Grade 9', 'Grade 10'];
+        return ['O Level', 'Matric'];
       case AcademicLevel.grades11to12:
-        return ['Grade 11', 'Grade 12'];
+        return ['A Level', 'Intermediate'];
       case AcademicLevel.university:
         return ['Year 1', 'Year 2', 'Year 3', 'Year 4'];
     }

@@ -66,7 +66,7 @@ class SavedScreen extends ConsumerWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                palette.primary.withValues(alpha: 0.8),
+                                palette.primary.withOpacity(0.8),
                                 palette.secondary,
                               ],
                             ),

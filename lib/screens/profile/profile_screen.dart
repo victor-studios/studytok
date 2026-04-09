@@ -51,7 +51,7 @@ class ProfileScreen extends ConsumerWidget {
                 color: palette.primaryLight,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: palette.primary.withValues(alpha: 0.3),
+                  color: palette.primary.withOpacity(0.3),
                   width: 3,
                 ),
               ),

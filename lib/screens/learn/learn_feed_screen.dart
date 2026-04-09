@@ -151,10 +151,10 @@ class _LearnFeedScreenState extends ConsumerState<LearnFeedScreen> {
                                 vertical: 8,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
+                                color: Colors.white.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.2),
+                                  color: Colors.white.withOpacity(0.2),
                                 ),
                               ),
                               child: Row(
@@ -206,10 +206,10 @@ class _LearnFeedScreenState extends ConsumerState<LearnFeedScreen> {
                                       vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.1),
+                                      color: Colors.white.withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(24),
                                       border: Border.all(
-                                        color: Colors.white.withValues(alpha: 0.25),
+                                        color: Colors.white.withOpacity(0.25),
                                         width: 1,
                                       ),
                                     ),
@@ -270,10 +270,10 @@ class _LearnFeedScreenState extends ConsumerState<LearnFeedScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.1),
+                                    color: Colors.white.withOpacity(0.1),
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: Colors.white.withValues(alpha: 0.3),
+                                      color: Colors.white.withOpacity(0.3),
                                     ),
                                   ),
                                   child: const Icon(
@@ -325,8 +325,8 @@ class _LearnFeedScreenState extends ConsumerState<LearnFeedScreen> {
                                     color: isCurrent
                                         ? Colors.white
                                         : isCompleted
-                                        ? palette.primary.withValues(alpha: 0.3)
-                                        : Colors.white.withValues(alpha: 0.1),
+                                        ? palette.primary.withOpacity(0.3)
+                                        : Colors.white.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(20),
                                     border: isCurrent
                                         ? null
@@ -413,7 +413,7 @@ class _LearnFeedScreenState extends ConsumerState<LearnFeedScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: s.color.withValues(alpha: 0.12),
+                      color: s.color.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(s.icon, color: s.color, size: 20),
@@ -638,8 +638,8 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
     final showOverlays = ref.watch(showOverlaysProvider);
     // Generate a gradient based on lesson index for visual variety
     final gradientColors = [
-      widget.palette.primary.withValues(alpha: 0.8),
-      widget.palette.secondary.withValues(alpha: 0.6),
+      widget.palette.primary.withOpacity(0.8),
+      widget.palette.secondary.withOpacity(0.6),
       Colors.black87,
     ];
 
@@ -676,7 +676,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: Colors.black.withOpacity(0.5),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 40),
@@ -693,7 +693,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
+                        color: Colors.white.withOpacity(0.15),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -730,7 +730,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.85),
+                          Colors.black.withOpacity(0.85),
                         ],
                       ),
                     ),
@@ -770,7 +770,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                             Text(
                               '${widget.lesson.title} - ${widget.lesson.subtitle}',
                               style: AppTypography.bodySmall.copyWith(
-                                color: Colors.white.withValues(alpha: 0.85),
+                                color: Colors.white.withOpacity(0.85),
                                 height: 1.4,
                               ),
                               maxLines: 2,
@@ -784,7 +784,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withValues(alpha: 0.2),
+                                    color: Colors.black.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -809,7 +809,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: widget.palette.primary.withValues(alpha: 0.8),
+                                    color: widget.palette.primary.withOpacity(0.8),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -898,7 +898,7 @@ class _LessonVideoCardState extends ConsumerState<_LessonVideoCard> {
               child: LinearProgressIndicator(
                 value: widget.lesson.lessonNumber / widget.lesson.totalLessonsInChapter,
                 minHeight: 2.5,
-                backgroundColor: Colors.white.withValues(alpha: 0.15),
+                backgroundColor: Colors.white.withOpacity(0.15),
                 valueColor: AlwaysStoppedAnimation(widget.palette.primary),
               ),
             ),
@@ -941,19 +941,19 @@ class _ActionRailButton extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: isActive
-                      ? (activeColor ?? Colors.white).withValues(alpha: 0.2)
-                      : Colors.white.withValues(alpha: 0.1),
+                      ? (activeColor ?? Colors.white).withOpacity(0.2)
+                      : Colors.white.withOpacity(0.1),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isActive
-                        ? (activeColor ?? Colors.white).withValues(alpha: 0.5)
-                        : Colors.white.withValues(alpha: 0.25),
+                        ? (activeColor ?? Colors.white).withOpacity(0.5)
+                        : Colors.white.withOpacity(0.25),
                     width: 1.5,
                   ),
                   boxShadow: [
                     if (isActive)
                       BoxShadow(
-                        color: (activeColor ?? Colors.white).withValues(alpha: 0.3),
+                        color: (activeColor ?? Colors.white).withOpacity(0.3),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
@@ -971,12 +971,12 @@ class _ActionRailButton extends StatelessWidget {
           Text(
             label,
             style: AppTypography.labelSmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.9),
+              color: Colors.white.withOpacity(0.9),
               fontWeight: FontWeight.w600,
               fontSize: 11,
               shadows: [
                 Shadow(
-                  color: Colors.black.withValues(alpha: 0.5),
+                  color: Colors.black.withOpacity(0.5),
                   blurRadius: 4,
                   offset: const Offset(0, 1),
                 ),

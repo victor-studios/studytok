@@ -44,7 +44,7 @@ class SubjectOverviewScreen extends ConsumerWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       subject.color,
-                      subject.color.withValues(alpha: 0.8),
+                      subject.color.withOpacity(0.8),
                     ],
                   ),
                 ),

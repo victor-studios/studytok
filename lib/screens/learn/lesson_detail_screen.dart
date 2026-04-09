@@ -82,7 +82,7 @@ class LessonDetailScreen extends ConsumerWidget {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -228,7 +228,7 @@ class LessonDetailScreen extends ConsumerWidget {
                             color: palette.primaryLight,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: palette.primary.withValues(alpha: 0.2),
+                              color: palette.primary.withOpacity(0.2),
                             ),
                           ),
                           child: Text(

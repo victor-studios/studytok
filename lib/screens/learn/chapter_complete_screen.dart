@@ -33,7 +33,7 @@ class ChapterCompleteScreen extends ConsumerWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: palette.primary.withValues(alpha: 0.3),
+                      color: palette.primary.withOpacity(0.3),
                       blurRadius: 32,
                       offset: const Offset(0, 8),
                     ),

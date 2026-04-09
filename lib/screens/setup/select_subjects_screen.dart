@@ -118,7 +118,7 @@ class SelectSubjectsScreen extends ConsumerWidget {
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: subject.color.withValues(alpha: 0.12),
+                                color: subject.color.withOpacity(0.12),
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: Icon(

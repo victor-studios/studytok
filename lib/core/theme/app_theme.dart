@@ -56,7 +56,7 @@ class AppTheme {
           backgroundColor: palette.primary,
           foregroundColor: Colors.white,
           elevation: 4,
-          shadowColor: palette.primary.withValues(alpha: 0.4),
+          shadowColor: palette.primary.withOpacity(0.4),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -161,7 +161,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.darkBackground,
       colorScheme: ColorScheme.dark(
         primary: palette.primary,
-        primaryContainer: palette.primary.withValues(alpha: 0.2),
+        primaryContainer: palette.primary.withOpacity(0.2),
         secondary: palette.secondary,
         tertiary: palette.support,
         surface: AppColors.darkSurface,
@@ -199,7 +199,7 @@ class AppTheme {
           backgroundColor: palette.primary,
           foregroundColor: Colors.white,
           elevation: 6,
-          shadowColor: palette.primary.withValues(alpha: 0.5),
+          shadowColor: palette.primary.withOpacity(0.5),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -220,7 +220,7 @@ class AppTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.darkCard,
-        selectedColor: palette.primary.withValues(alpha: 0.2),
+        selectedColor: palette.primary.withOpacity(0.2),
         labelStyle: AppTypography.labelLarge.copyWith(
           color: AppColors.darkPrimaryText,
         ),
@@ -256,7 +256,7 @@ class AppTheme {
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColors.darkSurface.withValues(alpha: 0.9),
+        backgroundColor: AppColors.darkSurface.withOpacity(0.9),
         elevation: 20,
         modalBackgroundColor: Colors.transparent,
         modalElevation: 0,
@@ -270,8 +270,8 @@ class AppTheme {
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: palette.primary,
-        linearTrackColor: palette.primary.withValues(alpha: 0.2),
-        circularTrackColor: palette.primary.withValues(alpha: 0.2),
+        linearTrackColor: palette.primary.withOpacity(0.2),
+        circularTrackColor: palette.primary.withOpacity(0.2),
       ),
     );
   }

@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/constants/spacing.dart';
 import '../../providers/app_providers.dart';
+import '../../models/subject.dart';
 import '../profile/profile_switcher.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -114,7 +115,7 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ),
                     progressColor: Colors.white,
-                    backgroundColor: Colors.white.withValues(alpha: 0.2),
+                    backgroundColor: Colors.white.withOpacity(0.2),
                     circularStrokeCap: CircularStrokeCap.round,
                   ),
                 ],
@@ -297,7 +298,7 @@ class DashboardScreen extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 color: isToday
                                     ? palette.primary
-                                    : palette.primary.withValues(alpha: 0.25),
+                                    : palette.primary.withOpacity(0.25),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                             ),

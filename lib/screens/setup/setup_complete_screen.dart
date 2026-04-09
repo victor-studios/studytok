@@ -48,7 +48,7 @@ class SetupCompleteScreen extends ConsumerWidget {
                   boxShadow: [
                     BoxShadow(
                       color: (palette?.primary ?? const Color(0xFF4338CA))
-                          .withValues(alpha: 0.3),
+                          .withOpacity(0.3),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),

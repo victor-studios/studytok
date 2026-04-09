@@ -120,7 +120,7 @@ class _TakeTestScreenState extends State<TakeTestScreen> {
                           padding: const EdgeInsets.all(AppSpacing.md),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? palette.primary.withValues(alpha: 0.08)
+                                ? palette.primary.withOpacity(0.08)
                                 : AppColors.surface,
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(

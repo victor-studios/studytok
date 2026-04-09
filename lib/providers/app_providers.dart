@@ -60,9 +60,9 @@ class AppStateController {
            
            return Subject(
              id: sub.id, classId: sub.classId, name: sub.name, shortDescription: sub.shortDescription,
-             icon: sub.icon, chapters: updatedChapters,
+             icon: sub.icon, color: sub.color, chapters: updatedChapters,
            );
-         }).toList();
+         }).cast<Subject>().toList();
        }
 
        ref.read(availableSubjectsProvider.notifier).state = subjects;

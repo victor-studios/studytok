@@ -38,7 +38,7 @@ class PaperUploadScreen extends StatelessWidget {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: palette.primary.withValues(alpha: 0.1),
+                      color: palette.primary.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(

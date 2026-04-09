@@ -34,7 +34,7 @@ class AppShell extends ConsumerWidget {
         child: Container(
           decoration: BoxDecoration(
             color: isLearnFeed
-                ? Colors.black.withValues(alpha: 0.85)
+                ? Colors.black.withOpacity(0.85)
                 : AppColors.surface,
             border: isLearnFeed
                 ? null
@@ -113,7 +113,7 @@ class _NavItem extends StatelessWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final activeColor = isOnDark ? Colors.white : primary;
     final inactiveColor = isOnDark
-        ? Colors.white.withValues(alpha: 0.5)
+        ? Colors.white.withOpacity(0.5)
         : AppColors.mutedText;
 
     return GestureDetector(
@@ -130,8 +130,8 @@ class _NavItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? (isOnDark
-                          ? Colors.white.withValues(alpha: 0.15)
-                          : primary.withValues(alpha: 0.1))
+                          ? Colors.white.withOpacity(0.15)
+                          : primary.withOpacity(0.1))
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
               ),

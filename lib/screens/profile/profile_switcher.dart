@@ -39,7 +39,7 @@ void showProfileSwitcher(BuildContext context, WidgetRef ref) {
                     height: 48,
                     decoration: BoxDecoration(
                       color: isActive
-                          ? palette.primary.withValues(alpha: 0.1)
+                          ? palette.primary.withOpacity(0.1)
                           : AppColors.background,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(

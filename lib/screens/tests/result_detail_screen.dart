@@ -105,8 +105,8 @@ class _AnswerBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isCorrect
-              ? AppColors.success.withValues(alpha: 0.3)
-              : AppColors.error.withValues(alpha: 0.3),
+              ? AppColors.success.withOpacity(0.3)
+              : AppColors.error.withOpacity(0.3),
         ),
       ),
       child: Row(

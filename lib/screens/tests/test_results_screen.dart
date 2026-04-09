@@ -52,7 +52,7 @@ class TestResultsScreen extends ConsumerWidget {
                           ),
                         ),
                         progressColor: Colors.white,
-                        backgroundColor: Colors.white.withValues(alpha: 0.2),
+                        backgroundColor: Colors.white.withOpacity(0.2),
                         circularStrokeCap: CircularStrokeCap.round,
                       ),
                       const SizedBox(height: 16),
@@ -69,7 +69,7 @@ class TestResultsScreen extends ConsumerWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(

@@ -219,7 +219,7 @@ class _TrendPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [color.withValues(alpha: 0.2), color.withValues(alpha: 0.0)],
+        colors: [color.withOpacity(0.2), color.withOpacity(0.0)],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     final points = [0.6, 0.5, 0.7, 0.65, 0.8, 0.75, 0.85];

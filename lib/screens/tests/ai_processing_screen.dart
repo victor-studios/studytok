@@ -67,7 +67,7 @@ class _AiProcessingScreenState extends State<AiProcessingScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: palette.primary.withValues(alpha: 0.3),
+                        color: palette.primary.withOpacity(0.3),
                         blurRadius: 32,
                       ),
                     ],
@@ -110,7 +110,7 @@ class _AiProcessingScreenState extends State<AiProcessingScreen>
                           color: done
                               ? palette.primary
                               : active
-                              ? palette.primary.withValues(alpha: 0.15)
+                              ? palette.primary.withOpacity(0.15)
                               : AppColors.background,
                           shape: BoxShape.circle,
                           border: Border.all(

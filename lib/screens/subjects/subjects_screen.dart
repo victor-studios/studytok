@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/constants/spacing.dart';
 import '../../providers/app_providers.dart';
+import '../../models/subject.dart';
 import '../profile/profile_switcher.dart';
 
 class SubjectsScreen extends ConsumerWidget {
@@ -86,7 +87,7 @@ class SubjectsScreen extends ConsumerWidget {
                             width: 36,
                             height: 36,
                             decoration: BoxDecoration(
-                              color: subject.color.withValues(alpha: 0.12),
+                              color: subject.color.withOpacity(0.12),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
