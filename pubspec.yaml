@@ -1,0 +1,62 @@
+name: studytok
+description: "A TikTok-style education app for structured learning."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Icons
+  cupertino_icons: ^1.0.8
+  lucide_icons: ^0.257.0
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Typography
+  google_fonts: ^6.2.1
+
+  # Local Storage
+  shared_preferences: ^2.5.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Video
+  video_player: ^2.9.5
+  chewie: ^1.10.0
+
+  # Camera & Image
+  image_picker: ^1.1.2
+
+  # Animations
+  animations: ^2.0.11
+  shimmer: ^3.0.0
+
+  # Utilities
+  smooth_page_indicator: ^1.2.0+3
+  percent_indicator: ^4.2.3
+  flutter_staggered_grid_view: ^0.7.0
+  cached_network_image: any
+  supabase_flutter: ^2.12.2
+  google_sign_in: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  hive_generator: any
+  build_runner: any
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
