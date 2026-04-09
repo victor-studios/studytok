@@ -22,7 +22,17 @@ class AppStateController {
     final user = ref.read(authRepositoryProvider).currentUser;
 
     try {
-       var subjects = await repo.getSubjectsByLevel(tier.name, grade);
+       final classes = await repo.getAcademicClassesByLevel(tier.name);
+       
+       // Filter classes by selected grade name, fallback to first class if not matched perfectly
+       final selectedClass = classes.firstWhere(
+         (c) => c.name == grade, 
+         orElse: () => classes.isNotEmpty ? classes.first : const AcademicClass(
+            id: '', name: '', description: '', color: Colors.blue, level: AcademicLevel.grades1to8, subjects: []
+         ),
+       );
+       
+       var subjects = selectedClass.subjects;
        
        if (user != null) {
          final states = await repo.getUserLessonStates(user.id);
@@ -49,9 +59,8 @@ class AppStateController {
            }).toList();
            
            return Subject(
-             id: sub.id, name: sub.name, shortDescription: sub.shortDescription,
-             icon: sub.icon, color: sub.color, level: sub.level,
-             grade: sub.grade, chapters: updatedChapters,
+             id: sub.id, classId: sub.classId, name: sub.name, shortDescription: sub.shortDescription,
+             icon: sub.icon, chapters: updatedChapters,
            );
          }).toList();
        }

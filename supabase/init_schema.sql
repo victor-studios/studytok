@@ -1,15 +1,23 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Table: academic_classes
+CREATE TABLE academic_classes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  color_hex TEXT NOT NULL,
+  academic_level TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Table: subjects
 CREATE TABLE subjects (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  class_id UUID NOT NULL REFERENCES academic_classes(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   short_description TEXT NOT NULL,
   icon_name TEXT NOT NULL,
-  color_hex TEXT NOT NULL,
-  academic_level TEXT NOT NULL,
-  grade TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -70,6 +78,7 @@ CREATE TABLE user_lesson_state (
 );
 
 -- Enable RLS
+ALTER TABLE academic_classes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chapters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
@@ -77,6 +86,7 @@ ALTER TABLE student_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_lesson_state ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous reads allowed for public curriculum
+CREATE POLICY "Public read classes" ON academic_classes FOR SELECT USING (true);
 CREATE POLICY "Public read subjects" ON subjects FOR SELECT USING (true);
 CREATE POLICY "Public read chapters" ON chapters FOR SELECT USING (true);
 CREATE POLICY "Public read lessons" ON lessons FOR SELECT USING (true);

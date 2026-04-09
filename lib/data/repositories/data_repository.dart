@@ -39,24 +39,26 @@ class DataRepository {
     }
   }
 
-  /// Fetch subjects with chapters and lessons
-  Future<List<Subject>> getSubjectsByLevel(String level, String grade) async {
+  /// Fetch classes with their nested subjects, chapters, and lessons
+  Future<List<AcademicClass>> getAcademicClassesByLevel(String level) async {
     try {
       final data = await _supabase
-          .from('subjects')
+          .from('academic_classes')
           .select('''
             *,
-            chapters:chapters (
+            subjects:subjects (
               *,
-              lessons:lessons (*)
+              chapters:chapters (
+                *,
+                lessons:lessons (*)
+              )
             )
           ''')
-          .eq('academic_level', level)
-          .eq('grade', grade);
+          .eq('academic_level', level);
 
-      return (data as List).map((e) => Subject.fromJson(e)).toList();
+      return (data as List).map((e) => AcademicClass.fromJson(e)).toList();
     } catch (e) {
-      throw Exception('Failed to load subjects: $e');
+      throw Exception('Failed to load academic classes: $e');
     }
   }
 

@@ -253,13 +253,12 @@ class MockData {
   ) {
     return Subject(
       id: id,
+      classId: 'mock-class-id',
       name: name,
       shortDescription: desc,
       icon: icon,
       color: color,
       chapters: chapters,
-      level: level,
-      grade: grade,
     );
   }
 

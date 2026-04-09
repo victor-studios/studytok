@@ -1,26 +1,82 @@
 import 'package:flutter/material.dart';
 import '../core/theme/level_theme.dart';
 
-/// Represents a subject within a class/grade.
+class AcademicClass {
+  final String id;
+  final String name;
+  final String description;
+  final Color color;
+  final AcademicLevel level;
+  final List<Subject> subjects;
+
+  const AcademicClass({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.color,
+    required this.level,
+    this.subjects = const [],
+  });
+
+  factory AcademicClass.fromJson(Map<String, dynamic> json) {
+     Color parseColor(String colorStr) {
+      if (colorStr.startsWith('#')) colorStr = colorStr.substring(1);
+      if (colorStr.length == 6) colorStr = 'FF$colorStr';
+      return Color(int.parse(colorStr, radix: 16));
+    }
+    
+    final classColor = parseColor(json['color_hex'] ?? '3B82F6');
+    
+    return AcademicClass(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'] ?? '',
+      color: classColor,
+      level: AcademicLevel.values.firstWhere(
+        (e) => e.name == json['academic_level'],
+        orElse: () => AcademicLevel.grades1to8,
+      ),
+      subjects: (json['subjects'] as List<dynamic>?)
+              ?.map((s) {
+                 final subjectMap = Map<String, dynamic>.from(s);
+                 subjectMap['injected_color'] = classColor;
+                 return Subject.fromJson(subjectMap);
+              })
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'color_hex': color.value.toRadixString(16).padLeft(8, '0').substring(2),
+      'academic_level': level.name,
+      'subjects': subjects.map((s) => s.toJson()).toList(),
+    };
+  }
+}
+
+/// Represents a subject within an academic class.
 class Subject {
   final String id;
+  final String classId;
   final String name;
   final String shortDescription;
   final IconData icon;
   final Color color;
   final List<Chapter> chapters;
-  final AcademicLevel level;
-  final String grade;
 
   const Subject({
     required this.id,
+    required this.classId,
     required this.name,
     required this.shortDescription,
     required this.icon,
     required this.color,
     this.chapters = const [],
-    required this.level,
-    required this.grade,
   });
 
   int get totalLessons =>
@@ -35,31 +91,19 @@ class Subject {
       totalLessons == 0 ? 0 : completedLessons / totalLessons;
 
   factory Subject.fromJson(Map<String, dynamic> json) {
-    // A robust mapping of icon strings to IconData would go here. For now, default to local mapping or a fallback.
     IconData parseIcon(String iconStr) {
       if (iconStr.contains('calculator')) return Icons.calculate;
       if (iconStr.contains('zap')) return Icons.bolt;
       return Icons.book;
     }
 
-    Color parseColor(String colorStr) {
-      if (colorStr.startsWith('0x')) {
-        return Color(int.parse(colorStr));
-      }
-      return Colors.blue;
-    }
-
     return Subject(
       id: json['id'],
+      classId: json['class_id'] ?? '',
       name: json['name'],
       shortDescription: json['short_description'] ?? '',
       icon: parseIcon(json['icon_name'] ?? ''),
-      color: parseColor(json['color_hex'] ?? ''),
-      level: AcademicLevel.values.firstWhere(
-        (e) => e.name == json['academic_level'],
-        orElse: () => AcademicLevel.grades1to8,
-      ),
-      grade: json['grade'] ?? '',
+      color: json['injected_color'] ?? Colors.blue,
       chapters: (json['chapters'] as List<dynamic>?)
               ?.map((c) => Chapter.fromJson(c))
               .toList() ??
@@ -70,12 +114,10 @@ class Subject {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'class_id': classId,
       'name': name,
       'short_description': shortDescription,
       'icon_name': icon.toString(),
-      'color_hex': '0xff${color.value.toRadixString(16).padLeft(8, '0').substring(2)}',
-      'academic_level': level.name,
-      'grade': grade,
       'chapters': chapters.map((c) => c.toJson()).toList(),
     };
   }

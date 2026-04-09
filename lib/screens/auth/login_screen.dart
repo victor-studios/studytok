@@ -74,15 +74,6 @@ class LoginScreen extends ConsumerWidget {
                 borderColor: AppColors.border,
                 onTap: () => _signInWithGoogle(context, ref),
               ),
-              const SizedBox(height: AppSpacing.sm),
-
-              _SocialButton(
-                icon: Icons.apple_rounded,
-                label: 'Continue with Apple',
-                backgroundColor: AppColors.primaryText,
-                textColor: Colors.white,
-                onTap: () => _mockLogin(context, ref),
-              ),
               const SizedBox(height: AppSpacing.xl),
 
               // Divider

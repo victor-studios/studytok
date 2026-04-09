@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 0;
 
-export default async function ChapterDetailPage({ params }: { params: Promise<{ subjectId: string, chapterId: string }> }) {
+export default async function ChapterDetailPage({ params }: { params: Promise<{ classId: string, subjectId: string, chapterId: string }> }) {
   const resolvedParams = await params;
   const supabase = await createClient();
   
@@ -21,8 +21,8 @@ export default async function ChapterDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 p-8 h-full">
-      <Link href={`/content/${resolvedParams.subjectId}`} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm w-fit">
-        <ArrowLeft className="w-4 h-4" /> Back to Subject
+      <Link href={`/content/${resolvedParams.classId}/${resolvedParams.subjectId}`} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm w-fit">
+        <ArrowLeft className="w-4 h-4" /> Back to Chapters
       </Link>
       
       <div className="mb-8">
@@ -71,7 +71,7 @@ export default async function ChapterDetailPage({ params }: { params: Promise<{ 
             <h2 className="text-lg font-bold text-white">Add Lesson</h2>
           </div>
           
-          <form action={createLesson.bind(null, resolvedParams.subjectId, chapter.id, chapter.title)} className="space-y-4">
+          <form action={createLesson.bind(null, resolvedParams.classId, resolvedParams.subjectId, chapter.id, chapter.title)} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-zinc-400 mb-1">Lesson Title</label>
               <input name="title" required placeholder="e.g. Newton's First Law" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-purple-500 text-sm" />

@@ -6,11 +6,11 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 0;
 
-export default async function SubjectDetailPage({ params }: { params: Promise<{ subjectId: string }> }) {
+export default async function SubjectDetailPage({ params }: { params: Promise<{ classId: string, subjectId: string }> }) {
   const supabase = await createClient();
   const resolvedParams = await params;
   
-  const { data: subject } = await supabase.from("subjects").select("*").eq("id", resolvedParams.subjectId).single();
+  const { data: subject } = await supabase.from("subjects").select("*, academic_classes(color_hex)").eq("id", resolvedParams.subjectId).single();
   if (!subject) notFound();
 
   const { data: chapters } = await supabase
@@ -21,12 +21,12 @@ export default async function SubjectDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 p-8 h-full">
-      <Link href="/content" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm w-fit">
-        <ArrowLeft className="w-4 h-4" /> Back to Curriculum
+      <Link href={`/content/${resolvedParams.classId}`} className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm w-fit">
+        <ArrowLeft className="w-4 h-4" /> Back to Subjects
       </Link>
       
       <div className="flex items-end gap-6 mb-8">
-        <div className="w-20 h-20 rounded-2xl flex-center shadow-2xl" style={{ backgroundColor: `#${subject.color_hex}` }}>
+        <div className="w-20 h-20 rounded-2xl flex-center shadow-2xl" style={{ backgroundColor: `#${subject.academic_classes?.color_hex || '3B82F6'}` }}>
           <Layers className="w-10 h-10 text-white" />
         </div>
         <div>
@@ -41,7 +41,7 @@ export default async function SubjectDetailPage({ params }: { params: Promise<{ 
         <div className="lg:col-span-2 space-y-4">
           <h2 className="text-xl font-bold text-white mb-4">Chapters Overview</h2>
           {chapters?.map((chapter, i) => (
-            <Link key={chapter.id} href={`/content/${subject.id}/${chapter.id}`} className="block">
+            <Link key={chapter.id} href={`/content/${resolvedParams.classId}/${subject.id}/${chapter.id}`} className="block">
               <div className="bento-card relative group hover:border-cyan-500/30 transition-all flex items-center gap-6 p-4">
                 <div className="text-4xl font-black text-white/5 group-hover:text-white/10 transition-colors w-12 text-center">
                   {i + 1}
@@ -70,7 +70,7 @@ export default async function SubjectDetailPage({ params }: { params: Promise<{ 
             <h2 className="text-lg font-bold text-white">Add Chapter</h2>
           </div>
           
-          <form action={createChapter.bind(null, subject.id)} className="space-y-4">
+          <form action={createChapter.bind(null, resolvedParams.classId, subject.id)} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-zinc-400 mb-1">Chapter Title</label>
               <input name="title" required placeholder="e.g. Introduction to Mechanics" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm" />
