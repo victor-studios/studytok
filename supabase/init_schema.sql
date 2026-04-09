@@ -1,6 +1,14 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Drop existing tables to allow for clean architecture regeneration
+DROP TABLE IF EXISTS user_lesson_state CASCADE;
+DROP TABLE IF EXISTS lessons CASCADE;
+DROP TABLE IF EXISTS chapters CASCADE;
+DROP TABLE IF EXISTS subjects CASCADE;
+DROP TABLE IF EXISTS academic_classes CASCADE;
+-- Note: We are deliberately NOT dropping student_profiles or admin_users so you don't lose your accounts.
+
 -- Table: academic_classes
 CREATE TABLE academic_classes (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
