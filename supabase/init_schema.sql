@@ -94,12 +94,20 @@ ALTER TABLE student_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_lesson_state ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous reads allowed for public curriculum
+DROP POLICY IF EXISTS "Public read classes" ON academic_classes;
+DROP POLICY IF EXISTS "Public read subjects" ON subjects;
+DROP POLICY IF EXISTS "Public read chapters" ON chapters;
+DROP POLICY IF EXISTS "Public read lessons" ON lessons;
+
 CREATE POLICY "Public read classes" ON academic_classes FOR SELECT USING (true);
 CREATE POLICY "Public read subjects" ON subjects FOR SELECT USING (true);
 CREATE POLICY "Public read chapters" ON chapters FOR SELECT USING (true);
 CREATE POLICY "Public read lessons" ON lessons FOR SELECT USING (true);
 
 -- Authenticated Users Policies
+DROP POLICY IF EXISTS "Users can manage own profile" ON student_profiles;
+DROP POLICY IF EXISTS "Users can manage own progress" ON user_lesson_state;
+
 CREATE POLICY "Users can manage own profile" ON student_profiles 
   FOR ALL USING (auth.uid() = id);
 
@@ -116,6 +124,9 @@ CREATE TABLE IF NOT EXISTS admin_users (
 ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 
 -- Admins Policies (Bypass RLS)
+DROP POLICY IF EXISTS "Admins can read all profiles" ON student_profiles;
+DROP POLICY IF EXISTS "Admins can read own record" ON admin_users;
+
 CREATE POLICY "Admins can read all profiles" ON student_profiles
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM admin_users WHERE admin_users.id = auth.uid())
