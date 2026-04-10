@@ -5,6 +5,8 @@ import { Sidebar } from "@/components/layout/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "StudyTok Admin",
   description: "Admin Web Dashboard for StudyTok",
