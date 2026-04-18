@@ -81,9 +81,27 @@ export async function createLesson(class_id: string, subject_id: string, chapter
   const supabase = await createClient();
   const title = formData.get("title") as string;
   const subtitle = formData.get("subtitle") as string;
-  const video_url = formData.get("video_url") as string;
+  const video_file = formData.get("video_file") as File;
   const teacher_name = formData.get("teacher_name") as string;
   const duration_seconds = parseInt(formData.get("duration_seconds") as string) || 180;
+  
+  let video_url = "";
+  if (video_file && video_file.size > 0) {
+    const fileExt = video_file.name.split('.').pop() || 'mp4';
+    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from("videos")
+      .upload(fileName, video_file, { upsert: false });
+      
+    if (uploadError) return { error: uploadError.message };
+    
+    // Get public URL
+    const { data: publicUrlData } = supabase.storage.from("videos").getPublicUrl(fileName);
+    video_url = publicUrlData.publicUrl;
+  } else {
+    return { error: "Please upload a valid video file." };
+  }
   
   const { count } = await supabase.from("lessons").select("*", { count: "exact" }).eq("chapter_id", chapter_id);
   const lesson_number = (count || 0) + 1;
@@ -105,5 +123,19 @@ export async function createLesson(class_id: string, subject_id: string, chapter
      await supabase.from("lessons").update({ total_lessons_in_chapter: lesson_number }).eq("chapter_id", chapter_id);
      revalidatePath(`/content/${class_id}/${subject_id}/${chapter_id}`);
   }
+  return { error: error?.message };
+}
+
+export async function deleteChapter(class_id: string, subject_id: string, chapter_id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("chapters").delete().eq("id", chapter_id);
+  if (!error) revalidatePath(`/content/${class_id}/${subject_id}`);
+  return { error: error?.message };
+}
+
+export async function deleteLesson(class_id: string, subject_id: string, chapter_id: string, lesson_id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("lessons").delete().eq("id", lesson_id);
+  if (!error) revalidatePath(`/content/${class_id}/${subject_id}/${chapter_id}`);
   return { error: error?.message };
 }

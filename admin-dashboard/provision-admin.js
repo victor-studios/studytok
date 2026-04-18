@@ -29,7 +29,7 @@ async function provisionAdmin() {
   let userId;
 
   if (authError) {
-    if (authError.message.includes("already exist")) {
+    if (authError.message.includes("already exist") || authError.message.includes("already been registered") || authError.code === 'email_exists') {
       console.log("User already exists in Auth. Looking up ID...");
       // For service role, we need to list users and find them if they exist
       const { data: usersData, error: listError } = await supabase.auth.admin.listUsers();

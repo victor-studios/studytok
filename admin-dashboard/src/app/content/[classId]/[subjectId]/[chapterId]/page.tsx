@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { CopyPlus, PlaySquare, ArrowLeft } from "lucide-react";
+import { CopyPlus, PlaySquare, ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { createLesson } from "@/lib/actions/content";
+import { createLesson, deleteLesson } from "@/lib/actions/content";
 import { notFound } from "next/navigation";
+import { DeleteButton } from "@/components/DeleteButton";
 
 export const revalidate = 0;
 
@@ -36,7 +37,7 @@ export default async function ChapterDetailPage({ params }: { params: Promise<{ 
         <div className="xl:col-span-2 space-y-4">
           <h2 className="text-xl font-bold text-white mb-4">Video Lessons</h2>
           {lessons?.map((lesson) => (
-            <div key={lesson.id} className="bento-card relative flex items-center gap-6 p-4">
+            <div key={lesson.id} className="bento-card group relative flex items-center gap-6 p-4">
                <div className="w-32 h-20 bg-black/40 border border-white/5 rounded-lg overflow-hidden relative flex-shrink-0">
                  {lesson.video_url ? (
                     <div className="absolute inset-0 flex-center">
@@ -46,11 +47,17 @@ export default async function ChapterDetailPage({ params }: { params: Promise<{ 
                     <div className="absolute inset-0 flex-center text-xs text-zinc-600">No Video</div>
                  )}
                </div>
-               <div className="flex-1">
-                 <div className="text-xs text-cyan-400 font-bold mb-1">LESSON {lesson.lesson_number}</div>
-                 <h3 className="text-lg font-bold text-white leading-tight">{lesson.title}</h3>
-                 <p className="text-zinc-400 text-sm mb-2">{lesson.subtitle}</p>
-                 <div className="text-xs text-zinc-500">Teacher: {lesson.teacher_name || "Unassigned"} • {Math.floor(lesson.duration_seconds / 60)} mins</div>
+               <div className="flex-1 flex justify-between items-center pr-4">
+                 <div>
+                   <div className="text-xs text-cyan-400 font-bold mb-1">LESSON {lesson.lesson_number}</div>
+                   <h3 className="text-lg font-bold text-white leading-tight">{lesson.title}</h3>
+                   <p className="text-zinc-400 text-sm mb-2">{lesson.subtitle}</p>
+                   <div className="text-xs text-zinc-500">Teacher: {lesson.teacher_name || "Unassigned"} • {Math.floor(lesson.duration_seconds / 60)} mins</div>
+                 </div>
+                 <DeleteButton action={async () => {
+                   "use server";
+                   await deleteLesson(resolvedParams.classId, resolvedParams.subjectId, chapter.id, lesson.id);
+                 }} />
                </div>
             </div>
           ))}
@@ -81,8 +88,8 @@ export default async function ChapterDetailPage({ params }: { params: Promise<{ 
               <input name="subtitle" required placeholder="Understanding inertia" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-purple-500 text-sm" />
             </div>
              <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">Video URL (mp4 / m3u8)</label>
-              <input name="video_url" required placeholder="https://example.com/video.mp4" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-purple-500 text-sm" />
+              <label className="block text-xs font-medium text-zinc-400 mb-1">Video File</label>
+              <input type="file" name="video_file" accept="video/*" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-purple-500 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-500/10 file:text-purple-400 hover:file:bg-purple-500/20" />
             </div>
              <div className="grid grid-cols-2 gap-4">
                <div>

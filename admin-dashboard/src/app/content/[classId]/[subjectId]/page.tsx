@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { FolderPlus, Layers, ArrowLeft } from "lucide-react";
+import { FolderPlus, Layers, ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { createChapter } from "@/lib/actions/content";
+import { createChapter, deleteChapter } from "@/lib/actions/content";
 import { notFound } from "next/navigation";
+import { DeleteButton } from "@/components/DeleteButton";
 
 export const revalidate = 0;
 
@@ -46,9 +47,15 @@ export default async function SubjectDetailPage({ params }: { params: Promise<{ 
                 <div className="text-4xl font-black text-white/5 group-hover:text-white/10 transition-colors w-12 text-center">
                   {i + 1}
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-white leading-tight">{chapter.title}</h3>
-                  <p className="text-zinc-400 text-sm line-clamp-1">{chapter.description}</p>
+                <div className="flex-1 flex justify-between items-center pr-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-white leading-tight">{chapter.title}</h3>
+                    <p className="text-zinc-400 text-sm line-clamp-1">{chapter.description}</p>
+                  </div>
+                  <DeleteButton action={async () => {
+                    "use server";
+                    await deleteChapter(resolvedParams.classId, subject.id, chapter.id);
+                  }} />
                 </div>
               </div>
             </Link>

@@ -3,6 +3,7 @@ import { FolderPlus, BookOpen, ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { createSubject, deleteSubject } from "@/lib/actions/content";
 import { notFound } from "next/navigation";
+import { DeleteButton } from "@/components/DeleteButton";
 
 export const revalidate = 0;
 
@@ -44,14 +45,10 @@ export default async function ClassDetailPage({ params }: { params: Promise<{ cl
               <div className="bento-card relative group hover:border-cyan-500/30 transition-all flex flex-col h-full">
                  <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-bold text-white leading-tight">{subject.name}</h3>
-                    <form action={async () => {
+                    <DeleteButton action={async () => {
                       "use server";
                       await deleteSubject(acClass.id, subject.id);
-                    }}>
-                      <button className="p-2 bg-rose-500/10 text-rose-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-500/20">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </form>
+                    }} />
                  </div>
                  <p className="text-zinc-400 text-sm line-clamp-2">{subject.short_description}</p>
                  <div className="mt-4 pt-4 border-t border-white/5 text-xs font-semibold text-cyan-400">

@@ -1,9 +1,10 @@
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Users, Search, MoreVertical } from "lucide-react";
 
 export const revalidate = 0;
 
 async function getStudents() {
+  const supabase = await createClient();
   const { data: students, error } = await supabase
     .from("student_profiles")
     .select("*")

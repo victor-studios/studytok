@@ -13,8 +13,8 @@ export default async function ContentDashboard() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 p-8 h-full">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">Curriculum Hierarchy</h1>
-          <p className="text-zinc-400 mt-2">Manage your academic classes.</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Curriculum Hierarchy</h1>
+          <p className="text-slate-400 mt-2">Manage your academic classes.</p>
         </div>
       </div>
 
@@ -42,9 +42,9 @@ export default async function ContentDashboard() {
                   </form>
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">{acClass.name}</h3>
-                <p className="text-zinc-400 text-sm mb-4 line-clamp-2">{acClass.description}</p>
+                <p className="text-slate-400 text-sm mb-4 line-clamp-2">{acClass.description}</p>
                 <div className="flex gap-2">
-                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-zinc-300">
+                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-slate-300">
                     {acClass.academic_level}
                   </span>
                 </div>
@@ -52,8 +52,8 @@ export default async function ContentDashboard() {
             </Link>
           ))}
           {(!classes || classes.length === 0) && (
-            <div className="col-span-2 p-12 border border-dashed border-white/10 rounded-2xl flex-center flex-col text-zinc-500">
-              <GraduationCap className="w-12 h-12 mb-4 opacity-20" />
+            <div className="col-span-2 p-12 border border-dashed border-white/10 rounded-2xl flex-center flex-col text-slate-500 bg-white/5">
+              <GraduationCap className="w-12 h-12 mb-4 opacity-30" />
               <p>No classes defined. Create one to begin organizing subjects.</p>
             </div>
           )}
@@ -70,31 +70,31 @@ export default async function ContentDashboard() {
           
           <form action={createClass} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">Class Name</label>
-              <input name="name" required placeholder="e.g. O-Levels, Grade 8" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-indigo-500 text-sm" />
+              <label className="block text-xs font-medium text-slate-300 mb-1 ml-1">Class Name</label>
+              <input name="name" required placeholder="e.g. O-Levels, Grade 8" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm placeholder:text-slate-500" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">Description</label>
-              <textarea name="description" required placeholder="A brief overview..." rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-indigo-500 text-sm resize-none" />
+              <label className="block text-xs font-medium text-slate-300 mb-1 ml-1">Description</label>
+              <textarea name="description" required placeholder="A brief overview..." rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm resize-none placeholder:text-slate-500" />
             </div>
             <div className="grid grid-cols-2 gap-4">
                <div className="col-span-2">
-                <label className="block text-xs font-medium text-zinc-400 mb-1">Academic Level Target</label>
-                <select name="academic_level" className="w-full bg-[#18181b] border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-indigo-500 text-sm appearance-none">
+                <label className="block text-xs font-medium text-slate-300 mb-1 ml-1">Academic Level Target</label>
+                <select name="academic_level" className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm appearance-none">
                   <option value="grades1to8">Grades 1-8</option>
-                  <option value="oLevels">O-Levels (Matric)</option>
-                  <option value="aLevels">A-Levels (FSC)</option>
+                  <option value="grades9to10">O-Levels (Matric)</option>
+                  <option value="grades11to12">A-Levels (FSC)</option>
                 </select>
               </div>
             </div>
              <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">Hex Color</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1 ml-1">Hex Color</label>
               <div className="flex gap-2">
-                <span className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-zinc-500 text-sm">#</span>
-                <input name="color_hex" placeholder="6366F1" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-indigo-500 text-sm" />
+                <span className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-slate-400 text-sm flex items-center">#</span>
+                <input name="color_hex" placeholder="6366F1" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm placeholder:text-slate-500" />
               </div>
             </div>
-            <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl px-4 py-2 transition-colors mt-4 text-sm shadow-lg shadow-indigo-500/20">
+            <button type="submit" className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-bold rounded-xl px-4 py-3 transition-colors mt-6 text-sm shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]">
               Create Class
             </button>
           </form>

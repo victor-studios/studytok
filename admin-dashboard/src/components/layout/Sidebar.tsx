@@ -20,7 +20,7 @@ export function Sidebar() {
   return (
     <div className="flex h-screen w-64 flex-col border-r border-white/10 bg-black/40 backdrop-blur-lg transform-gpu">
       <div className="flex h-16 items-center px-6 border-b border-white/10">
-        <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+        <div className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
           StudyTok Admin
         </div>
       </div>
@@ -33,13 +33,13 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all duration-300",
                 isActive
-                  ? "bg-white/10 text-white shadow-sm border border-white/10"
-                  : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                  ? "bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-white/10"
+                  : "text-slate-400 hover:bg-white/5 hover:text-white"
               )}
             >
-              <Icon className={cn("h-5 w-5", isActive ? "text-cyan-400" : "text-zinc-400")} />
+              <Icon className={cn("h-5 w-5", isActive ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" : "text-slate-400")} />
               {item.name}
             </Link>
           );
@@ -53,7 +53,7 @@ export function Sidebar() {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-white">Admin User</span>
-              <span className="text-xs text-zinc-500">Superadmin</span>
+              <span className="text-xs text-slate-400">Superadmin</span>
             </div>
           </div>
           <button 
